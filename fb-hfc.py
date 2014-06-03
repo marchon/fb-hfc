@@ -6,7 +6,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 from StringIO import StringIO
 from colorama import init
 from colorama import Fore, Back, Style
-from pyvirtualdisplay import Display
 import lxml.html
 import time
 import re
@@ -14,6 +13,9 @@ import requests
 import argparse
 import sys
 import os.path
+import sys
+if sys.platform != 'win32' and sys.platform != 'darwin':
+  from pyvirtualdisplay import Display
 
 init(autoreset=True)
 
@@ -82,7 +84,7 @@ if args.target and args.output is None:
 
 def facebook_login(username,password):
 	print ("\n\n\nLogin to Facebook...."),
-	sys.stdout.flush() 
+	sys.stdout.flush()
 	url = "http://www.facebook.com"
 	driver.get(url)
 	elem = driver.find_element_by_id("email")
@@ -110,7 +112,7 @@ def request_url(url,get_cookies):
 
 def graph_search(graph_search_query):
 	print ("Searching for: \"" + Fore.YELLOW + graph_search_query + Fore.RESET + "\"..."),
-	sys.stdout.flush() 
+	sys.stdout.flush()
 	driver.implicitly_wait(5)
 	time.sleep(1)
 	elem = driver.find_element_by_xpath("//div[@class='_586i']")
@@ -189,7 +191,7 @@ def extract_mutual_friends(profiles_urls):
 		html_lxml = lxml.html.parse(StringIO(html_source)) #parse to lxml object
 		params_result = html_lxml.xpath(xpath_name_params)
 		params_result2 = html_lxml.xpath(xpath_name_params2)
-		
+
 		for prm,prm2 in zip(params_result,params_result2):
 
 			if "profile.php" in prm:
@@ -220,12 +222,12 @@ def check_if_public(profiles,cookies):
 		if profile.isdigit():
 			profile_url = "https://www.facebook.com/profile.php?id=%s&sk=friends" % profile
 			print("Checking Profile: %s......" % profile),
-			sys.stdout.flush() 
+			sys.stdout.flush()
 		else:
 			profile_url = "https://www.facebook.com/%s/friends" % profile
 			print("Checking Profile: %s......" % profile),
-			sys.stdout.flush() 
-		
+			sys.stdout.flush()
+
 		html = request_url(profile_url,cookies)
 
 		if "All Friends" in html:
@@ -266,7 +268,7 @@ def save_file(filename,results):
 					myFile.write("Username: " + user.encode('utf8')+"\n")
 				else:
 					myFile.write("Full Name: " + user.encode('utf8')+"\n"+"Link to Profile: " + profile_url.encode('utf8')+"\n\n")
-	else:	
+	else:
 		with open(filename, 'w') as myFile:
 			for user in results:
 				myFile.write(user.encode('utf8')+"\n")
@@ -280,16 +282,16 @@ filename = args.output
 graph_search_query = args.query
 profilesfile = args.profilesfile
 
-if args.target and args.profilesfile: 
+if args.target and args.profilesfile:
 	if not os.path.isfile(profilesfile):
 		print profilesfile +" file doesn't exist"
 		exit()
 
 
 
-
-display = Display(visible=0, size=(1600, 900))
-display.start()
+if sys.platform != 'win32' and sys.platform != 'darwin' :
+  display = Display(visible=0, size=(1600, 900))
+  display.start()
 
 driver = webdriver.Firefox()
 
@@ -306,7 +308,7 @@ if args.query:
 	exit()
 
 
-if args.target: 
+if args.target:
 		profiles = open_file(profilesfile)
 		results = generate_mutual_link(profiles,target)
 		results = extract_mutual_friends(results)
