@@ -19,6 +19,8 @@ pip install selenium
 pip install requests
 
 pip install colorama
+pip install pyvirtualdisplay
+pip  install lxml
 
 Note: Tested on ubuntu only
 
