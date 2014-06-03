@@ -92,7 +92,7 @@ def facebook_login(username,password):
 	elem = driver.find_element_by_id("pass")
 	elem.send_keys(password)
 	elem.send_keys(Keys.RETURN)
-	time.sleep(1)
+	time.sleep(5)
 	html_source = driver.page_source
 	if "Please re-enter your password" in html_source or "Incorrect Email" in html_source:
 		print Fore.RED + "Incorrect Username or Password"
