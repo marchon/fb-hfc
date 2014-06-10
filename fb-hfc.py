@@ -112,11 +112,13 @@ def request_url(url,get_cookies):
 
 def graph_search(graph_search_query):
 	print ("Searching for: \"" + Fore.YELLOW + graph_search_query + Fore.RESET + "\"..."),
+        print graph_search_query 
 	sys.stdout.flush()
 	driver.implicitly_wait(5)
 	time.sleep(1)
-	elem = driver.find_element_by_xpath("//div[@class='_586i']")
-	elem.click()
+	#elem = driver.find_element_by_xpath("//div[@class='_586i']")
+	elem = driver.find_element_by_xpath("//div[contains(@class,'_586i')]")
+	#elem.click()
 	elem.send_keys(graph_search_query)
 	elem.send_keys(Keys.RETURN)
 	print Fore.GREEN + "Done\n"
