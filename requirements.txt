@@ -3,3 +3,4 @@ requests
 colorama
 pyvirtualdisplay
 lxml
+Requests-cache
