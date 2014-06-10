@@ -10,6 +10,8 @@ import lxml.html
 import time
 import re
 import requests
+import requests_cache
+
 import argparse
 import sys
 import os.path
@@ -18,6 +20,11 @@ if sys.platform != 'win32' and sys.platform != 'darwin':
   from pyvirtualdisplay import Display
 
 init(autoreset=True)
+
+cacheFilename = 'fb_cache.db'  
+
+requests_cache.install_cache(cacheFilename)
+
 
 print "-----------------------------------------------------------------------------"
 print "          Facebook hidden friends crawler POC - by Shay Priel"
@@ -295,7 +302,10 @@ if sys.platform != 'win32' and sys.platform != 'darwin' :
   display = Display(visible=0, size=(1600, 900))
   display.start()
 
-driver = webdriver.Firefox()
+try: 
+   driver = webdriver.PhantomJS()
+except: 
+   driver = webdriver.Firefox()
 
 cookies = dict()
 cookies = facebook_login(username,password)
